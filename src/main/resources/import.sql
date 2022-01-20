@@ -1,1 +1,0 @@
-INSERT INTO character (id, name) VALUES (1, 'rawphl');

@@ -1,34 +1,27 @@
 package ch.bbcag.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Character {
-    public static List<Character> getCharacters() {
-        return Arrays.asList(
-                new Character("Son Goku"),
-                new Character("Vegeta")
-        );
-    }
-
+public class Todo {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @NotNull(message = "name is required")
     @NotBlank(message = "item name can't be empty")
     private String name;
 
-    public Character() {}
-
-    public Character(String name) {
-        this.name = name;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private ApplicationUser user;
 
     public Integer getId() {
         return id;
@@ -46,24 +39,33 @@ public class Character {
         this.name = name;
     }
 
+    public ApplicationUser getUser() {
+        return user;
+    }
+
+    public void setUser(ApplicationUser user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Character character = (Character) o;
-        return id.equals(character.id) && name.equals(character.name);
+        Todo todo = (Todo) o;
+        return Objects.equals(id, todo.id) && Objects.equals(name, todo.name) && Objects.equals(user, todo.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, user);
     }
 
     @Override
     public String toString() {
-        return "Character{" +
+        return "Todo{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", user=" + user +
                 '}';
     }
 }
