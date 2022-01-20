@@ -1,7 +1,6 @@
 package ch.bbcag.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -53,7 +52,7 @@ public class ApplicationUser {
     public void setPassword(String password) {
         this.password = password;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

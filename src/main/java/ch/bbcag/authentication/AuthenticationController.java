@@ -13,7 +13,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +26,12 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 @RestController
 public class AuthenticationController {
     private static Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
-    private static record Credentials(String username, String password){}
-    private static record LoginSuccess(String token, String username, Date expires){}
+
+    private static record Credentials(String username, String password) {
+    }
+
+    private static record LoginSuccess(String token, String username, Date expires) {
+    }
 
     @Autowired
     private ApplicationUserService applicationUserService;
@@ -56,7 +59,7 @@ public class AuthenticationController {
     public LoginSuccess login(@RequestBody Credentials credentials) {
         ApplicationUser user = applicationUserService.findByName(credentials.username);
 
-        if(user == null) {
+        if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
@@ -72,7 +75,7 @@ public class AuthenticationController {
             Date expires = new Date(System.currentTimeMillis() + jwtExpirationMs);
             String token = generateToken(credentials.username, expires);
             return new LoginSuccess(token, credentials.username, expires);
-        } catch(BadCredentialsException e) {
+        } catch (BadCredentialsException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
@@ -81,7 +84,7 @@ public class AuthenticationController {
     public ApplicationUser register(@RequestBody Credentials credentials) {
         ApplicationUser user = applicationUserService.findByName(credentials.username);
 
-        if(user != null) {
+        if (user != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
         ApplicationUser newUser = new ApplicationUser();

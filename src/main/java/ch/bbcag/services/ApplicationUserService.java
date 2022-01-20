@@ -29,6 +29,7 @@ public class ApplicationUserService {
     public ApplicationUser findById(Integer id) {
         return applicationUserRepository.findById(id).orElseThrow();
     }
+
     public ApplicationUser findByName(String name) {
         return applicationUserRepository.findByUsername(name);
     }
