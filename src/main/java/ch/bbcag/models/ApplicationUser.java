@@ -1,6 +1,7 @@
 package ch.bbcag.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -23,11 +24,18 @@ public class ApplicationUser {
 
     @NotBlank
     @Length(min = 6, max = 255)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Todo> todos = new HashSet<>();
+    public ApplicationUser(){
+    }
+    public ApplicationUser(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public Integer getId() {
         return id;

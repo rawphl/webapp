@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    font-family: 'Open Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    max-width: 420px;
+}
+
+#loginForm label, input {
+    padding: 0.5em;
+}
+
+#loginForm button {
+    margin-top: 0.5em;
+}

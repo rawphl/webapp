@@ -17,7 +17,7 @@ public class Todo {
     @NotBlank(message = "item name can't be empty")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private ApplicationUser user;
