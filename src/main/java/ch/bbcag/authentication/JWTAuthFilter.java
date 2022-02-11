@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class JWTAuthFilter implements Filter {
+public class JWTAuthFilter extends OncePerRequestFilter {
 
     private String secret;
 
@@ -22,11 +23,8 @@ public class JWTAuthFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse res = (HttpServletResponse) response;
-
-        String authorizationHeader = req.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+        String authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader == null) {
             chain.doFilter(request, response);
@@ -50,7 +48,7 @@ public class JWTAuthFilter implements Filter {
             Authentication authentication = new UsernamePasswordAuthenticationToken(user, user, new ArrayList<>());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (TokenExpiredException e) {
-            res.addHeader("TOKEN-EXPIRED", "true");
+            response.addHeader("TOKEN-EXPIRED", "true");
         } catch (Exception e) {
 
         } finally {
